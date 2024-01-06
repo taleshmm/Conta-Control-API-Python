@@ -1,0 +1,7 @@
+SQLAlchemy==2.0.25
+Alembic==1.13.1
+psycopg2_binary==2.9.9
+fastapi==0.108.0
+passlib==1.7.4
+uvicorn==0.25.0
+PyJWT==2.8.0
