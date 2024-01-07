@@ -1,0 +1,7 @@
+Alembic:
+- alembic init versions (para iniciar o alembic, no caso versions é o nome da pasta que ele cria)
+- alembic revision --autogenerate -m "Initial version"  (gerar as migrattions)
+- alembic upgrade head
+
+Unicorn
+- uvicorn main:app --reload (para iniciar a aplicação fastapi e ter acesso ao swagger)

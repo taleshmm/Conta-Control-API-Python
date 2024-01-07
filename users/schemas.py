@@ -10,5 +10,4 @@ class User(UserBase):
     id: str
     nickname: str
     sex: str
-    type_acess: str
-    sales: float
+    type_access: str
