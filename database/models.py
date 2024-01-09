@@ -17,7 +17,7 @@ class Permission(Base):
   __tablename__ = 'permission'
   
   id = Column(Integer, primary_key=True)
-  type = Column(String, unique=True)
+  type_access = Column(String, unique=True)
   owner = relationship("User", back_populates="type_access")
 
   
