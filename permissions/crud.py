@@ -3,11 +3,17 @@ from database import models
 from permissions import schemas
 from fastapi import HTTPException
 from http import HTTPStatus
+from sqlalchemy.exc import DatabaseError
 
 def get_permission(db: Session):
-  permissions = db.query(models.Permission)
-  return permissions
-
+  try:
+    permissions = db.query(models.Permission)
+    return permissions
+  except DatabaseError as db_error:
+    raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f"Database Error - {db_error}")
+  except Exception as error:
+    raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f"Internal Server Error - {error}")
+  
 def create_permission(db: Session, type_permission: str):
     try:
       existing_permission = db.query(models.Permission).filter_by(type_access=type_permission).first()
@@ -20,5 +26,5 @@ def create_permission(db: Session, type_permission: str):
       db.commit()
       db.refresh(db_permission)
       return db_permission
-    except Exception as e:
-        raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f"Internal Server Error - {e}")
+    except Exception as error:
+        raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f"Internal Server Error - {error}")
