@@ -14,7 +14,7 @@ class User(UserBase):
     sex: str
     type_access: schemas.Permission
     
-    class Config:
+    class ConfigDict:
         from_attributes = True
         
         
@@ -23,5 +23,5 @@ class UserCreate(UserSecurity, UserBase):
     nickname: str
     sex: str
     type_access: int
-    class Config:
+    class ConfigDict:
         from_attributes = True

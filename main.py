@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import permissions
 import users
+import auth
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, 
@@ -11,6 +12,7 @@ app.add_middleware(CORSMiddleware,
                    allow_methods=["*"], 
                    allow_headers=["*"])
 
+app.include_router(auth.router, tags=["Authentication"])
 app.include_router(users.router, tags=["Users"])
 app.include_router(permissions.router, tags=["Permissions"])
 

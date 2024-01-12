@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from permissions import schemas, crud
 from database import get_db
 from sqlalchemy.orm import Session
+from auth import utils
 
 router = APIRouter(prefix="/permission")
 

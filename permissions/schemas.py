@@ -4,5 +4,5 @@ class Permission(BaseModel):
     id: int
     type_access: str
     
-    class Config:
+    class ConfigDict:
         from_attributes = True

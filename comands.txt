@@ -5,3 +5,13 @@ Alembic:
 
 Unicorn
 - uvicorn main:app --reload (para iniciar a aplicação fastapi e ter acesso ao swagger)
+- pytest -k nome do teste (roda o teste especifico)
+-  pytest -vv (mostra uma analise melhor dos testes)  
+
+Pytest
+- pytest (roda todos os testes)
+
+
+Coverage
+- coverage run -m pytest -v (vai rodar os testes e criar um arquivo de relatorio)
+- coverage report -m (vai ler o arquivo e mostrar os coberturas de teste)

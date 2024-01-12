@@ -8,5 +8,5 @@ class UserResponse(BaseModel):
     sex: str
     type_access: str
     
-    class Config:
+    class ConfigDict:
         from_attributes = True
