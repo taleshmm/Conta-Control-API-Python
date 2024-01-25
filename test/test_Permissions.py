@@ -65,7 +65,7 @@ def test_create_permission_exists(mock_create_permission):
   response = client.post(f"/permission?type_access={request}")
 
   assert response.status_code == HTTPStatus.BAD_REQUEST
-  assert response.json() == {"detail": f"Permission already exists id: 1, type: admin"}
+  assert response.json() == {"detail": "Permission already exists id: 1, type: admin"}
  
 
 def test_get_permission_database_error(mock_session):

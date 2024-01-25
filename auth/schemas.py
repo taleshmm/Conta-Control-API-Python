@@ -1,10 +1,8 @@
 from pydantic import BaseModel
 
-
-class User(BaseModel):
+class UserAuthentication(BaseModel):
     email: str
     password: str
 
-
-class UserCreate(User):
+class UserCreate(UserAuthentication):
     confirm_password:str
