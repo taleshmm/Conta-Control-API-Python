@@ -1,9 +1,20 @@
-from sqlalchemy.orm import Session
-from database import models
-from users import schemas
-from fastapi import HTTPException
 from http import HTTPStatus
+
+from fastapi import HTTPException
+from sqlalchemy.orm import Session
+
+from database import models
 from response import UserResponse
+from users import schemas
+
+
+def get_user_by_id(db: Session, id: int):
+  try:
+    db_user = db.query(models.User).filter_by(id=id).first()
+    return db_user
+  except Exception as error:
+    raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f'Internal Server Error - {error}')
+    print('An exception occurred')
 
 def get_user_email(db: Session, email: str):
   try:
@@ -50,6 +61,22 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.rollback()
     raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f'Internal Server Error - {error}')
   
-
+def delete_user_db(db: Session, user_email: str = None, user_id: int = None):
+  try:
+    query = db.query(models.User)
+    if user_email is not None:
+      query = query.filter_by(email=user_email)
+    if user_id is not None:
+      query = query.filter_by(id=user_id)
+    user = query.first()
+    if user:
+      db.delete(user)
+      db.commit()
+      return user.email
+    return 
+  except Exception as error:
+    db.rollback()
+    raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f'Internal Server Error = {error}')
+    
   
   

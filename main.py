@@ -1,9 +1,11 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+import accounts
+import auth
 import permissions
 import users
-import auth
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, 
@@ -15,29 +17,7 @@ app.add_middleware(CORSMiddleware,
 app.include_router(auth.router, tags=["Authentication"])
 app.include_router(users.router, tags=["Users"])
 app.include_router(permissions.router, tags=["Permissions"])
+app.include_router(accounts.router, tags=["Account"])
 
 if __name__ == '__main__':
   uvicorn.run(app, host='127.0.0.1', port=8000) 
-""" if __name__ == '__main__':
-  uvicorn.run(app, host='127.0.0.1', port=8000) 
-  colocar no lauch.json
-    {
-      "name": "Python: FastAPI",
-      "type": "python",
-      "request": "launch",
-      "module": "uvicorn",
-      "cwd": "${workspaceFolder}/",
-      "args": ["main:app", "--reload", "--port", "8000"],
-      "jinja": true,
-      "justMyCode": true
-    },
-    {
-      "name": "Python: Current File",
-      "type": "python",
-      "request": "launch",
-      "program": "${file}",
-      "console": "integratedTerminal",
-      "justMyCode": true
-    }
-  ]
-  """

@@ -1,5 +1,7 @@
 from pydantic import BaseModel
+
 from permissions import schemas
+
 
 class UserBase(BaseModel):
     email: str  

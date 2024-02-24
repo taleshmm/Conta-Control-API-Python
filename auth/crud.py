@@ -1,12 +1,11 @@
+from http import HTTPStatus
+
+from fastapi import HTTPException
 from passlib.hash import pbkdf2_sha256
 from sqlalchemy.orm import Session
-from fastapi import HTTPException
-from http import HTTPStatus
-from sqlalchemy.orm import Session
+
 from auth import schemas
 from database import models
-from users.schemas import UserCreate
-
 
 
 def get_user_email(db: Session, email: str):
@@ -16,7 +15,7 @@ def get_user_email(db: Session, email: str):
   except Exception as error:
     raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f'Internal Server Error - {error}')
   
-def create_user(db: Session, user: UserCreate):
+def create_user(db: Session, user: schemas.UserCreateAuth):
   try:
     existing_user = get_user_email(db, user.email)
 
