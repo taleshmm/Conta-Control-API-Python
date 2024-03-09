@@ -15,6 +15,6 @@ def read_permission(db: Session = Depends(get_db)):
   return permission
 
 @router.post("", response_model=schemas.Permission, status_code=HTTPStatus.CREATED)
-def created_permission(type_access: str, db: Session = Depends(get_db), ):
+def created_permission(type_access: str, db: Session = Depends(get_db)):
   permissions = crud.create_permission(db, type_access)
   return permissions

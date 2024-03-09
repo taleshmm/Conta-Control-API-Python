@@ -67,7 +67,7 @@ def update_account(db: Session, id_user: int, account: schemas.UpdateAccount):
         
         db.commit()
         
-        return 'Updated with success'
+        {'message': 'Account updated successfully', 'account': get_account}
     except Exception as error:
         db.rollback()
         raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f'Error:{error}')

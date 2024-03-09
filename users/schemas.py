@@ -6,9 +6,6 @@ from permissions import schemas
 class UserBase(BaseModel):
     email: str  
     
-class UserSecurity(BaseModel):
-    password: str
-    
 class User(UserBase):
     id: int
     name: str
@@ -19,11 +16,3 @@ class User(UserBase):
     class ConfigDict:
         from_attributes = True
         
-        
-class UserCreate(UserSecurity, UserBase):
-    name: str
-    nickname: str
-    sex: str
-    type_access: int
-    class ConfigDict:
-        from_attributes = True

@@ -1,8 +1,11 @@
-from sqlalchemy.orm import Session
-from database import models
-from fastapi import HTTPException
 from http import HTTPStatus
+
+from fastapi import HTTPException
 from sqlalchemy.exc import DatabaseError
+from sqlalchemy.orm import Session
+
+from database import models
+
 
 def get_permission(db: Session):
   try:

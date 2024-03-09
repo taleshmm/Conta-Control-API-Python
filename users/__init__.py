@@ -10,11 +10,6 @@ from users import crud, schemas
 
 router = APIRouter(prefix="/user", dependencies=[Depends(verify_token)])
 
-@router.post("", response_model=CreateUserResponse, status_code=HTTPStatus.CREATED)
-def created_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    response = crud.create_user(db, user)
-    return response
-
 @router.get("", response_model=list[UserResponse], status_code=HTTPStatus.OK )
 def read_user(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     response = crud.get_users(db, skip, limit)
@@ -46,3 +41,8 @@ def delete_user(email: str = None, id: int = None, db: Session = Depends(get_db)
     if response:
         return f"User {response} deleted with success."
     raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail=f'User not found')
+
+@router.put("", status_code=HTTPStatus.OK)
+def update_user(user = schemas.UserBase, db: Session = Depends(get_db)):
+    response = crud.updated_user(db, user)
+    return response

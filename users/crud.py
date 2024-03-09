@@ -42,24 +42,6 @@ def get_users(db: Session, skip: int = 0, limit: int = 10):
     return user_responses
   except Exception as error:
     raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f'Internal server error = {error}') 
-
-def create_user(db: Session, user: schemas.UserCreate):
-  try:
-    existing_user = get_user_email(db, user.email)
-
-    if existing_user:
-      raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail=f"User already exists email: {existing_user.email}")
-    
-    faked_hashed = f'{user.password}+notreallyhashed'
-    db_user = models.User(email=user.email, name=user.name, hashed_password=faked_hashed, nickname=user.nickname, sex=user.sex, type_access_id=user.type_access)
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
-    
-  except Exception as error:
-    db.rollback()
-    raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f'Internal Server Error - {error}')
   
 def delete_user_db(db: Session, user_email: str = None, user_id: int = None):
   try:
@@ -74,6 +56,25 @@ def delete_user_db(db: Session, user_email: str = None, user_id: int = None):
       db.commit()
       return user.email
     return 
+  except Exception as error:
+    db.rollback()
+    raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f'Internal Server Error = {error}')
+    
+def updated_user(db: Session, user: schemas.UserBase):
+  try:
+    existing_user = get_user_by_id(db, user.id)
+    
+    if not existing_user:
+      raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail={'User not found'})
+    
+    existing_user.name = user.name
+    existing_user.type_access = user.type_access
+    existing_user.sex = user.sex
+    existing_user.email = user.email
+    existing_user.nickname = user.nickname
+    
+    db.commit()
+    return {'message': 'User updated successfully', 'user': existing_user}
   except Exception as error:
     db.rollback()
     raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail=f'Internal Server Error = {error}')

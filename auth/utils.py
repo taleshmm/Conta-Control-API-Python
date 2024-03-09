@@ -1,14 +1,15 @@
-from database import get_db
-from auth.crud import get_user_email
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi import Depends, HTTPException
-from http import HTTPStatus
-from auth import schemas
-import jwt
-from datetime import datetime, timedelta
-from passlib.hash import pbkdf2_sha256
 import time
+from datetime import datetime, timedelta
+from http import HTTPStatus
 
+import jwt
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from passlib.hash import pbkdf2_sha256
+
+from auth import schemas
+from auth.crud import get_user_email
+from database import get_db
 
 security = HTTPBearer()
 SECRET_KEY = "secret"
@@ -26,7 +27,7 @@ def validate_user(db, email: str, password: str):
 def authenticate_user(credentials: HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
   user = validate_user(db, credentials.username, credentials.password)
   if not user:
-    raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail=f'User or password incorrect', headers={'WWW-Authenticate': 'Basic'})
+    raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail=f'User or password incorrect', headers={'WWW-Authenticate': 'Bearer'})
   return user
 
 def create_token(credentials: schemas.UserAuthentication, db=Depends(get_db)):
@@ -34,7 +35,7 @@ def create_token(credentials: schemas.UserAuthentication, db=Depends(get_db)):
   if not user:
     raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail=f'User or password incorrect', headers={'WWW-Authenticate': 'Bearer'})
   
-  expiration_time = datetime.utcnow() + timedelta(minutes=30)
+  expiration_time = datetime.utcnow() + timedelta(minutes=60)
   token = jwt.encode({"email": credentials.email, "exp": expiration_time}, SECRET_KEY, ALGORITHM)
   unix_time = time.mktime(expiration_time.timetuple())
   return {
